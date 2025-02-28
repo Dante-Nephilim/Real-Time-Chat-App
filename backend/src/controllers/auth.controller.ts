@@ -98,9 +98,9 @@ export const updateProfile = async (req: CustomRequest, res: Response) => {
   }
 };
 
-export const checkAuth = async (req: Request, res: Response) => {
+export const checkAuth = async (req: CustomRequest, res: Response) => {
   try {
-    res.status(200).json({ message: "Auth Checked Successfully" });
+    res.status(200).json({ message: "Auth Checked Successfully", data: req.user });
   } catch (error) {
     res.status(500).json({ message: "Internal Server Error" });
   }
