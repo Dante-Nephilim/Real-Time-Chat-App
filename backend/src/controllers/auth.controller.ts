@@ -2,6 +2,8 @@ import bcrypt from "bcryptjs";
 import { Request, Response } from "express";
 import User from "../models/user.model.ts";
 import { generateToken } from "../lib/utils.ts";
+import cloudinary from "../lib/cloudinary.ts";
+import { CustomRequest } from "../middlewares/auth.middleware.ts";
 
 export const register = async (req: Request, res: Response) => {
   try {
@@ -80,4 +82,26 @@ export const logout = (req: Request, res: Response) => {
   }
 };
 
-export const updateProfile = async (req: Request, res: Response) => {};
+export const updateProfile = async (req: CustomRequest, res: Response) => {
+  try {
+    const { profilePic } = req.body;
+    const userId = req.user._id;
+    if (!profilePic) {
+      res.status(400).json({ message: "Please provide a profile picture" });
+    }
+
+    const uploadResponse = await cloudinary.uploader.upload(profilePic);
+    const updatedUser = await User.findByIdAndUpdate(userId, { profilePic: uploadResponse.secure_url }, { new: true });
+    res.status(200).json({ message: "Profile updated successfully", data: updatedUser });
+  } catch (error) {
+    console.log("Error in updateProfile" + error);
+  }
+};
+
+export const checkAuth = async (req: CustomRequest, res: Response) => {
+  try {
+    res.status(200).json({ message: "Auth Checked Successfully", data: req.user });
+  } catch (error) {
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};

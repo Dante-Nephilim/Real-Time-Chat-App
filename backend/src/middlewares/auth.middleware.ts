@@ -2,7 +2,7 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 import User from "../models/user.model.ts";
 import { Request, Response, NextFunction, RequestHandler } from "express";
 
-interface CustomRequest extends Request {
+export interface CustomRequest extends Request {
   user?: any;
 }
 
