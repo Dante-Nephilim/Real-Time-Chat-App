@@ -1,20 +1,17 @@
 import express from "express";
+import { checkAuth, login, logout, register, updateProfile } from "./src/controllers/auth.controller.ts";
+import protectedRoute from "./src/middlewares/auth.middleware.ts";
 
 const router = express.Router();
 
-router.post("/register", (req, res) => {
-  console.log(req.body);
-  res.send("Registered");
-});
+router.post("/register", register);
 
-router.post("/login", (req, res) => {
-  console.log(req.body);
-  res.send("Logged in");
-});
+router.post("/login", login);
 
-router.post("/logout", (req, res) => {
-  console.log(req.body);
-  res.send("Logged out");
-});
+router.post("/logout", logout);
+
+router.put("/update-profile", protectedRoute, updateProfile);
+
+router.get("/check", protectedRoute, checkAuth);
 
 export default router;
