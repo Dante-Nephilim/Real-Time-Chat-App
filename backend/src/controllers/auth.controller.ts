@@ -82,7 +82,7 @@ export const logout = (req: Request, res: Response) => {
   }
 };
 
-export const updateProfile = async (req: CustomRequest, res: Response) => {
+export const updateProfilePicture = async (req: CustomRequest, res: Response) => {
   try {
     const { profilePic } = req.body;
     const userId = req.user._id;

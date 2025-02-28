@@ -8,6 +8,8 @@ export interface CustomRequest extends Request {
 
 const protectedRoute: RequestHandler = async (req: CustomRequest, res: Response, next: NextFunction) => {
   try {
+    console.info("Protected Route");
+    console.info(req.body);
     const token = req.cookies.jwt;
     if (!token) {
       res.status(401).json({ message: "Missing token" });

@@ -1,5 +1,5 @@
 import express from "express";
-import { checkAuth, login, logout, register, updateProfile } from "./src/controllers/auth.controller.ts";
+import { checkAuth, login, logout, register, updateProfilePicture } from "./src/controllers/auth.controller.ts";
 import protectedRoute from "./src/middlewares/auth.middleware.ts";
 
 const router = express.Router();
@@ -10,7 +10,7 @@ router.post("/login", login);
 
 router.post("/logout", logout);
 
-router.put("/update-profile", protectedRoute, updateProfile);
+router.put("/update-profile-picture", protectedRoute, updateProfilePicture);
 
 router.get("/check", protectedRoute, checkAuth);
 

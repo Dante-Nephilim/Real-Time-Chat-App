@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { axiosInstance } from "../lib/axios";
+import { RegisterFormData } from "../pages/RegisterPage";
 
 interface AuthState {
   authUser: any | null;
@@ -8,6 +9,7 @@ interface AuthState {
   isUpdatingProfile: boolean;
   isCheckingAuth: boolean;
   checkAuth: () => Promise<void>;
+  signUp: (data: RegisterFormData) => Promise<void>;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -26,6 +28,17 @@ export const useAuthStore = create<AuthState>((set) => ({
       console.log(error);
     } finally {
       set({ isCheckingAuth: false });
+    }
+  },
+  signUp: async (data: RegisterFormData) => {
+    try {
+      set({ isSigningUp: true });
+      const response = await axiosInstance.post("/auth/register", data);
+      set({ authUser: response.data.data });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      set({ isSigningUp: false });
     }
   },
 }));
