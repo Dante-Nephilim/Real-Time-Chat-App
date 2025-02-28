@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import { Eye, EyeOff, MessageSquare, User } from "lucide-react";
+import toast from "react-hot-toast";
+import { Link } from "react-router-dom";
 
 export interface RegisterFormData {
   firstName: string;
@@ -21,10 +23,34 @@ export default function RegisterPage() {
 
   const { signUp, isSigningUp } = useAuthStore();
 
-  const validateForm = () => {};
+  const validateForm = () => {
+    if (formData.firstName.length === 0) {
+      toast.error("First Name is required");
+      return false;
+    } else if (formData.lastName.length === 0) {
+      toast.error("Last Name is required");
+      return false;
+    } else if (formData.email.length === 0) {
+      toast.error("Email is required");
+      return false;
+    } else if (formData.password.length === 0) {
+      toast.error("Password is required");
+      return false;
+    } else if (formData.confirmPassword.length === 0) {
+      toast.error("Confirm Password is required");
+      return false;
+    } else if (formData.password !== formData.confirmPassword) {
+      toast.error("Passwords do not match");
+      return false;
+    }
+    return true;
+  };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (validateForm()) {
+      signUp(formData);
+    }
   };
 
   return (
@@ -153,7 +179,21 @@ export default function RegisterPage() {
                 </button>
               </div>
             </div>
+            {/* Submit */}
+            <div className="form-control">
+              {!isSigningUp && <button className="btn btn-primary w-full">Create Account</button>}
+              {isSigningUp && (
+                <button className="btn btn-primary w-full" disabled>
+                  Creating Account...
+                </button>
+              )}
+            </div>
           </form>
+          <div className="flex justify-center items-center">
+            <p>
+              Already have an account? <Link to="/login">Login</Link>
+            </p>
+          </div>
         </div>
       </div>
     </div>
