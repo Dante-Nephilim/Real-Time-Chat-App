@@ -8,7 +8,6 @@ export const getUsersForSideBar = async (req: CustomRequest, res: Response) => {
   try {
     const loggedInUserId = req.user._id;
     const filteredUsers = await User.find({ _id: { $ne: loggedInUserId } }).select("-password");
-    console.log(filteredUsers);
     res.status(200).json({ message: "Users fetched successfully", data: filteredUsers });
   } catch (error) {
     console.error(error);
