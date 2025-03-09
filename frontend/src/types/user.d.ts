@@ -5,7 +5,7 @@ export type User = {
   email: string;
   password: string;
   profilePic: string;
-  fullname: string;
+  fullName: string;
   createdAt: string;
   updatedAt: string;
 };

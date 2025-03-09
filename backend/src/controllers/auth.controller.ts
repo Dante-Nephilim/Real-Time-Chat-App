@@ -26,9 +26,13 @@ export const register = async (req: Request, res: Response) => {
         message: "Registered",
         data: {
           _id: user._id,
-          fullname: user.fullName,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          fullName: user.fullName,
           email: user.email,
           profilePic: user.profilePic,
+          createdAt: user.createdAt,
+          updatedAt: user.updatedAt,
         },
       });
     } else {
@@ -58,9 +62,13 @@ export const login = async (req: Request, res: Response) => {
           message: "Login Successful",
           data: {
             _id: user._id,
-            fullname: user.fullName,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            fullName: user.fullName,
             email: user.email,
             profilePic: user.profilePic,
+            createdAt: user.createdAt,
+            updatedAt: user.updatedAt,
           },
         });
       }
@@ -83,6 +91,8 @@ export const logout = (req: Request, res: Response) => {
 };
 
 export const updateProfilePicture = async (req: CustomRequest, res: Response) => {
+  console.log("Update Profile Picture");
+  console.info(req.body);
   try {
     const { profilePic } = req.body;
     const userId = req.user._id;

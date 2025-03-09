@@ -3,6 +3,7 @@ import { axiosInstance } from "../lib/axios";
 import { RegisterFormData } from "../pages/RegisterPage";
 import { LoginFormData } from "../pages/LoginPage";
 import { User } from "../types/user";
+import toast from "react-hot-toast";
 interface AuthState {
   authUser: User | null;
   isSigningUp: boolean;
@@ -13,6 +14,7 @@ interface AuthState {
   signUp: (data: RegisterFormData) => Promise<void>;
   login: (data: LoginFormData) => Promise<void>;
   logout: () => Promise<void>;
+  updateProfilePic: (data: { profilePic: string }) => Promise<void>;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -76,6 +78,20 @@ export const useAuthStore = create<AuthState>((set) => ({
       console.error(error);
     } finally {
       set({ isLoggingIn: false });
+    }
+  },
+
+  updateProfilePic: async (data) => {
+    set({ isUpdatingProfile: true });
+    try {
+      const response = await axiosInstance.put("/auth/update-profile-picture", data);
+      set({ authUser: response.data.data });
+      toast.success("Profile Picture Updated Successfully");
+    } catch (error) {
+      console.error(error);
+      toast.error("something went wrong.");
+    } finally {
+      set({ isUpdatingProfile: false });
     }
   },
 }));
