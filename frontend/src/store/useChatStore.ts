@@ -14,9 +14,10 @@ interface ChatState {
   isOnlineUsersLoading: boolean;
   setSelectedUser: (user: User | null) => void;
   onlineUsers: User[];
+  sendMessage: (text: string, image: string | null) => Promise<void>;
 }
 
-export const useChatStore = create<ChatState>((set) => ({
+export const useChatStore = create<ChatState>((set, get) => ({
   messages: [],
   users: [],
   selectedUser: null,
@@ -67,5 +68,17 @@ export const useChatStore = create<ChatState>((set) => ({
   //todo optimize this function later.
   setSelectedUser: (user: User | null) => {
     set({ selectedUser: user });
+  },
+  sendMessage: async (messageData) => {
+    const { selectedUser, messages } = get();
+    if (!selectedUser) return;
+    try {
+      const res = await axiosInstance.post(`messages/send/${selectedUser._id}`, messageData);
+      set({ messages: [...messages, res.data.data] });
+      toast.success("Message sent successfully");
+    } catch (error) {
+      toast.error("Something went wrong, Unable to send message");
+      console.log(error);
+    }
   },
 }));

@@ -11,7 +11,7 @@ export default function ChatContainer() {
     if (selectedUser?._id) getMessages(selectedUser?._id);
   }, [getMessages, selectedUser]);
 
-  if (true) {
+  if (isMessagesLoading) {
     return (
       <div className="flex-1 flex flex-col overflow-auto">
         <ChatHeader />
