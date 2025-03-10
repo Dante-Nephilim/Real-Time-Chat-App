@@ -22,7 +22,7 @@ export default function ChatHeader() {
           </div>
         </div>
         {/* Close Button */}
-        <button onClick={() => setSelectedUser(null)} type="button">
+        <button onClick={() => setSelectedUser(null)} type="button" title="Close Chat">
           <X />
         </button>
       </div>

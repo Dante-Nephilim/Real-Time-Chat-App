@@ -2,9 +2,10 @@ import { create } from "zustand";
 import { axiosInstance } from "../lib/axios";
 import toast from "react-hot-toast";
 import { User } from "../types/user";
+import { Message } from "../types/message";
 
 interface ChatState {
-  messages: string[];
+  messages: Message[];
   users: User[];
   getUsers: () => Promise<void>;
   getMessages: (userId: string) => Promise<void>;
