@@ -1,9 +1,10 @@
 import { X } from "lucide-react";
 import { useChatStore } from "../store/useChatStore";
+import { useAuthStore } from "../store/useAuthStore";
 
 export default function ChatHeader() {
-  const { selectedUser, setSelectedUser, onlineUsers } = useChatStore();
-
+  const { selectedUser, setSelectedUser } = useChatStore();
+  const { onlineUsers } = useAuthStore();
   if (!selectedUser) return null;
   return (
     <div className="p-2.5 border-b border-base-300">
@@ -18,7 +19,9 @@ export default function ChatHeader() {
           {/* UserInfo */}
           <div>
             <h3 className="font-medium">{selectedUser.fullName}</h3>
-            <p className="text-sm text-base-content/70">{onlineUsers.includes(selectedUser) ? "Online" : "Offline"}</p>
+            <p className="text-sm text-base-content/70">
+              {onlineUsers.includes(selectedUser._id) ? "Online" : "Offline"}
+            </p>
           </div>
         </div>
         {/* Close Button */}

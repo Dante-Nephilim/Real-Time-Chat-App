@@ -4,14 +4,14 @@ import { RegisterFormData } from "../pages/RegisterPage";
 import { LoginFormData } from "../pages/LoginPage";
 import { User } from "../types/user";
 import toast from "react-hot-toast";
-import { io } from "socket.io-client";
+import { io, Socket } from "socket.io-client";
 interface AuthState {
   authUser: User | null;
   isSigningUp: boolean;
   isLoggingIn: boolean;
   isUpdatingProfile: boolean;
   isCheckingAuth: boolean;
-  socket: any;
+  socket: Socket | null;
   checkAuth: () => Promise<void>;
   signUp: (data: RegisterFormData) => Promise<void>;
   login: (data: LoginFormData) => Promise<void>;
@@ -19,6 +19,8 @@ interface AuthState {
   updateProfilePic: (data: { profilePic: string }) => Promise<void>;
   connectSocket: () => void;
   disconnectSocket: () => void;
+  onlineUsers: string[];
+  isOnlineUsersLoading: boolean;
 }
 const baseURL = "http://localhost:5000";
 
@@ -29,6 +31,21 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   isUpdatingProfile: false,
   isCheckingAuth: true,
   socket: null,
+  onlineUsers: [],
+  isOnlineUsersLoading: false,
+
+  getOnlineUsers: async () => {
+    set({ isOnlineUsersLoading: true });
+    try {
+      const response = await axiosInstance.get("messages/online-users");
+      set({ onlineUsers: response.data.data });
+    } catch (error) {
+      toast.error("Something went wrong, Unable to fetch online users");
+      console.error(error);
+    } finally {
+      set({ isOnlineUsersLoading: false });
+    }
+  },
 
   checkAuth: async () => {
     try {
@@ -104,15 +121,26 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       set({ isUpdatingProfile: false });
     }
   },
+
   connectSocket: () => {
     const { authUser } = get();
     if (!authUser || get().socket?.connected) return;
-    const socket = io(baseURL);
+    const socket = io(baseURL, {
+      query: {
+        userId: authUser._id,
+      },
+    });
     socket.connect();
+    set({ socket });
+    socket.on("getOnlineUsers", (userIds) => {
+      console.log(userIds);
+      set({ onlineUsers: userIds });
+    });
   },
+
   disconnectSocket: () => {
     if (get().socket?.connected) {
-      get().socket.disconnect();
+      get().socket?.disconnect();
     }
   },
 }));

@@ -2,12 +2,13 @@ import { useEffect } from "react";
 import { useChatStore } from "../store/useChatStore";
 import SideBarSkeleton from "./skeletons/SideBarSkeleton";
 import { Users } from "lucide-react";
-import { User } from "../types/user";
+import { useAuthStore } from "../store/useAuthStore";
 
 export default function Sidebar() {
   const { users, selectedUser, setSelectedUser, getUsers, isUsersLoading } = useChatStore();
+  const { onlineUsers } = useAuthStore();
+  console.log(onlineUsers);
 
-  const OnlineUsers: User[] = [];
   useEffect(() => {
     getUsers();
   }, [getUsers]);
@@ -42,9 +43,9 @@ export default function Sidebar() {
                 alt={user.fullName}
                 className="size-12 rounded-full object-cover"
               />
-              {OnlineUsers.includes(user) && (
+              {onlineUsers.includes(user._id) && (
                 <span
-                  className="absolute botton-0 right-0 size-3 bg-green-300
+                  className="absolute bottom-0 right-0 size-3 bg-green-300
                                   rounded-full ring-2 ring-zinc-900"
                 />
               )}
@@ -52,7 +53,7 @@ export default function Sidebar() {
             {/* User Info -- only visible on larger screens */}
             <div className="hidden lg:block text-left min-2-0">
               <div className="font-medium truncate">{user.fullName}</div>
-              <div className="text-sm text-zinc-400">{OnlineUsers.includes(user) ? "Online" : "Offline"}</div>
+              <div className="text-sm text-zinc-400">{onlineUsers.includes(user._id) ? "Online" : "Offline"}</div>
             </div>
           </button>
         ))}
