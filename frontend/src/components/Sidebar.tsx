@@ -7,7 +7,6 @@ import { useAuthStore } from "../store/useAuthStore";
 export default function Sidebar() {
   const { users, selectedUser, setSelectedUser, getUsers, isUsersLoading } = useChatStore();
   const { onlineUsers } = useAuthStore();
-  console.log(onlineUsers);
 
   useEffect(() => {
     getUsers();

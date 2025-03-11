@@ -3,6 +3,7 @@ import { axiosInstance } from "../lib/axios";
 import toast from "react-hot-toast";
 import { User } from "../types/user";
 import { Message } from "../types/message";
+import { useAuthStore } from "./useAuthStore";
 
 interface ChatState {
   messages: Message[];
@@ -14,6 +15,8 @@ interface ChatState {
   isMessagesLoading: boolean;
   setSelectedUser: (user: User | null) => void;
   sendMessage: (text: string, image: string | null) => Promise<void>;
+  subscribeToMessages: () => void;
+  unsubscribeToMessages: () => void;
 }
 
 export const useChatStore = create<ChatState>((set, get) => ({
@@ -53,6 +56,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
   setSelectedUser: (user: User | null) => {
     set({ selectedUser: user });
   },
+
   sendMessage: async (messageData) => {
     const { selectedUser, messages } = get();
     if (!selectedUser) return;
@@ -63,6 +67,26 @@ export const useChatStore = create<ChatState>((set, get) => ({
     } catch (error) {
       toast.error("Something went wrong, Unable to send message");
       console.log(error);
+    }
+  },
+
+  subscribeToMessages: () => {
+    const { selectedUser } = get();
+    if (!selectedUser) return;
+    const socket = useAuthStore.getState().socket;
+    if (socket) {
+      socket.on("newMessage", (message: Message) => {
+        set({ messages: [...get().messages, message] });
+      });
+    }
+  },
+
+  unsubscribeToMessages: () => {
+    const { selectedUser } = get();
+    if (!selectedUser) return;
+    const socket = useAuthStore.getState().socket;
+    if (socket) {
+      socket.off("newMessage");
     }
   },
 }));

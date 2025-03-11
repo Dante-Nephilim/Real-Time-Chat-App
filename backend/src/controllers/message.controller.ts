@@ -1,4 +1,5 @@
 import cloudinary from "../lib/cloudinary.ts";
+import { getReceiverSocketId, io } from "../lib/socket.ts";
 import { CustomRequest } from "../middlewares/auth.middleware.ts";
 import Message from "../models/message.model.ts";
 import User from "../models/user.model.ts";
@@ -51,6 +52,13 @@ export const sendMessage = async (req: CustomRequest, res: Response) => {
       imageUrl,
     });
     await newMessage.save();
+
+    const receiverSocketId = getReceiverSocketId(receiverId);
+
+    if (receiverSocketId) {
+      io.to(receiverSocketId).emit("newMessage", newMessage);
+    }
+
     res.status(201).json({ message: "Message sent successfully", data: newMessage });
   } catch (error) {
     console.log("Error in Message controller : sendMessage" + error);

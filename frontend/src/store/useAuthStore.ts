@@ -132,8 +132,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     });
     socket.connect();
     set({ socket });
-    socket.on("getOnlineUsers", (userIds) => {
-      console.log(userIds);
+    socket.on("getOnlineUsers", (onlineUsersArray: [string, string][]) => {
+      const userIds = onlineUsersArray.map(([userId, socketId]: [string, string]) => userId);
+      console.log("Online Users", userIds);
       set({ onlineUsers: userIds });
     });
   },
