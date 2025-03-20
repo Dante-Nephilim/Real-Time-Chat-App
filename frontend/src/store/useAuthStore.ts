@@ -22,7 +22,7 @@ interface AuthState {
   onlineUsers: string[];
   isOnlineUsersLoading: boolean;
 }
-const baseURL = "http://localhost:5000";
+const baseURL = import.meta.env.VITE_BACK_END_URL as string;
 
 export const useAuthStore = create<AuthState>((set, get) => ({
   authUser: null,
