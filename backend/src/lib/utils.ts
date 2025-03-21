@@ -19,7 +19,7 @@ export const generateToken = (userId: Types.ObjectId, res: Response) => {
     httpOnly: true, // Recommended for security
     secure: process.env.NODE_ENV === "production", // Recommended for production
     maxAge: maxAgeMilliseconds,
-    sameSite: "strict", // recommended security option
+    sameSite: "none", // recommended security option,
   });
   return token;
 };
