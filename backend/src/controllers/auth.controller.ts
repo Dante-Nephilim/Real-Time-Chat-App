@@ -1,9 +1,9 @@
 import bcrypt from "bcryptjs";
 import { Request, Response } from "express";
-import User from "../models/user.model.ts";
-import { generateToken } from "../lib/utils.ts";
-import cloudinary from "../lib/cloudinary.ts";
-import { CustomRequest } from "../middlewares/auth.middleware.ts";
+import User from "../models/user.model";
+import { generateToken } from "../lib/utils";
+import cloudinary from "../lib/cloudinary";
+import { CustomRequest } from "../middlewares/auth.middleware";
 
 export const register = async (req: Request, res: Response) => {
   try {

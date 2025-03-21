@@ -1,8 +1,8 @@
-import cloudinary from "../lib/cloudinary.ts";
-import { getReceiverSocketId, io } from "../lib/socket.ts";
-import { CustomRequest } from "../middlewares/auth.middleware.ts";
-import Message from "../models/message.model.ts";
-import User from "../models/user.model.ts";
+import cloudinary from "../lib/cloudinary";
+import { getReceiverSocketId, io } from "../lib/socket";
+import { CustomRequest } from "../middlewares/auth.middleware";
+import Message from "../models/message.model";
+import User from "../models/user.model";
 import { Request, Response } from "express";
 
 export const getUsersForSideBar = async (req: CustomRequest, res: Response) => {

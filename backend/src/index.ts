@@ -1,11 +1,11 @@
 import { config } from "dotenv";
 import express from "express";
-import authRoutes from "./routes/auth.route.ts";
-import messageRoutes from "./routes/message.route.ts";
-import { connectDB } from "./lib/db.ts";
+import authRoutes from "./routes/auth.route";
+import messageRoutes from "./routes/message.route";
+import { connectDB } from "./lib/db";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import { app, server } from "./lib/socket.ts";
+import { app, server } from "./lib/socket";
 
 config();
 
