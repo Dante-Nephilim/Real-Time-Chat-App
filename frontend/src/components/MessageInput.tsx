@@ -35,7 +35,7 @@ const MessageInput = () => {
     if (!text.trim() && !imagePreview) return;
 
     try {
-      await sendMessage(text.trim(), imagePreview ?? null);
+      await sendMessage({ text: text.trim(), image: imagePreview ?? null });
 
       // Clear form
       setText("");

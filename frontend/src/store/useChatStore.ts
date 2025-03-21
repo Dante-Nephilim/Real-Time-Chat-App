@@ -14,7 +14,7 @@ interface ChatState {
   isUsersLoading: boolean;
   isMessagesLoading: boolean;
   setSelectedUser: (user: User | null) => void;
-  sendMessage: (text: string, image: string | null) => Promise<void>;
+  sendMessage: (payload: { text: string; image: string | null }) => Promise<void>;
   subscribeToMessages: () => void;
   unsubscribeToMessages: () => void;
 }
@@ -58,6 +58,8 @@ export const useChatStore = create<ChatState>((set, get) => ({
   },
 
   sendMessage: async (messageData) => {
+    console.log("Message Data");
+    console.log(messageData);
     const { selectedUser, messages } = get();
     if (!selectedUser) return;
     try {
